@@ -21,7 +21,7 @@ namespace ui
         static ui::touchTrack track;
 
         //Color swapping selBox
-        color clrPrev = colorCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
+        clr clrPrev = clrCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
 
         if(clrAdd)
         {
@@ -37,7 +37,7 @@ namespace ui
         }
 
         //Update selBox color
-        color clrUpdt = colorCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
+        clr clrUpdt = clrCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
 
         unsigned x = 70, y = 80;
         unsigned endUser = start + 32;
@@ -45,7 +45,7 @@ namespace ui
             endUser = data::users.size();
 
         texSwapColors(ui::selBox, clrPrev, clrUpdt);
-        texDraw(ui::selBox, ui::fb, selRectX, selRectY);
+        texDraw(ui::selBox, frameBuffer, selRectX, selRectY);
 
         for(unsigned i = start; i < endUser; y += 144)
         {
@@ -83,10 +83,10 @@ namespace ui
                         userRectX = 1264 - userRectWidth;
 
                     drawTextbox(userRectX, y - 50, userRectWidth, 38);
-                    drawText(username.c_str(), ui::fb, ui::shared, userRectX + 16, y - 38, 16, txtClr);
+                    drawText(username.c_str(), frameBuffer, ui::shared, userRectX + 16, y - 38, 16, txtClr);
                 }
 
-                texDrawSkipNoAlpha(data::users[i].userIcon, ui::fb, tX, y);
+                texDrawSkipNoAlpha(data::users[i].userIcon, frameBuffer, tX, y);
             }
         }
 

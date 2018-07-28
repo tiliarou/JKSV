@@ -8,6 +8,7 @@
 #include "data.h"
 #include "ui.h"
 #include "file.h"
+#include "util.h"
 
 extern "C"
 {
@@ -33,7 +34,7 @@ extern "C"
 int main(int argc, const char *argv[])
 {
     fs::init();
-    graphicsInit(1280, 720);
+    graphicsInit(1280, 720, MAX_GFXCMD_DEFAULT);
     data::loadDataInfo();
     ui::init();
 
@@ -63,13 +64,16 @@ int main(int argc, const char *argv[])
 
                 //Just to be sure
                 fsdevUnmountDevice("sv");
+
+                //Kick back to user
+                ui::mstate = USR_SEL;
             }
         }
         else if(down & KEY_PLUS)
             break;
-
         ui::runApp(down, held, p);
 
+        gfxProcQueue();
         gfxHandleBuffs();
     }
     #ifdef __debug__

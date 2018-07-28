@@ -25,7 +25,7 @@ namespace ui
         static ui::touchTrack track;
 
         //Color swapping
-        color clrPrev = colorCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
+        clr clrPrev = clrCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
 
         if(clrAdd)
         {
@@ -41,7 +41,7 @@ namespace ui
         }
 
         //Updated sel
-        color clrUpdt = colorCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
+        clr clrUpdt = clrCreateRGBA(0x00, 0x60 + clrShft, 0xBB + clrShft, 0xFF);
 
         texSwapColors(ui::selBox, clrPrev, clrUpdt);
 
@@ -52,7 +52,7 @@ namespace ui
             endTitle = data::curUser.titles.size();
 
         //draw Rect so it's always behind icons
-        texDraw(ui::selBox, ui::fb, selRectX, selRectY);
+        texDraw(ui::selBox, frameBuffer, selRectX, selRectY);
 
         for(unsigned i = start; i < endTitle; y += 144)
         {
@@ -91,7 +91,7 @@ namespace ui
                         rectX = 1264 - rectWidth;
 
                     drawTextbox(rectX, y - 50, rectWidth, 38);
-                    drawText(title.c_str(), ui::fb, ui::shared, rectX + 16, y - 38, 16, txtClr);
+                    drawText(title.c_str(), frameBuffer, ui::shared, rectX + 16, y - 38, 16, txtClr);
                 }
                 data::curUser.titles[i].icon.drawHalf(tX, y);
             }

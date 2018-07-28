@@ -32,9 +32,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	JKSV
 BUILD		:=	build
-SOURCES		:=	src src/ui
+SOURCES		:=	src src/ui src/gfx
 DATA		:=	data
-INCLUDES	:=	inc
+INCLUDES	:=	inc inc/gfx
 EXEFS_SRC	:=	exefs_src
 APP_TITLE   :=  JKSV
 APP_AUTHOR  :=  JK_
@@ -141,7 +141,7 @@ ifneq ($(ROMFS),)
 	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
 endif
 
-.PHONY: $(BUILD) clean all debug
+.PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
 all: $(BUILD)

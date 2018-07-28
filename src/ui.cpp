@@ -31,7 +31,7 @@ namespace ui
     std::vector<ui::button> selButtons;
 
     //UI colors
-    color clearClr, mnuTxt, txtClr, rectLt, rectSh, tboxClr;
+    clr clearClr, mnuTxt, txtClr, rectLt, rectSh, tboxClr;
 
     //textbox pieces
     //I was going to flip them when I draw them, but then laziness kicked in.
@@ -42,8 +42,6 @@ namespace ui
     tex *selBox;
 
     font *shared;
-
-    tex *fb;
 
     void init()
     {
@@ -66,12 +64,12 @@ namespace ui
                 buttonY = texLoadPNGFile("romfs:/img/button/buttonY_drk.png");
                 buttonMin = texLoadPNGFile("romfs:/img/button/buttonMin_drk.png");
 
-                clearClr = colorCreateU32(0xFFEBEBEB);
-                mnuTxt = colorCreateU32(0xFF000000);
-                txtClr = colorCreateU32(0xFFFFFFFF);
-                rectLt = colorCreateU32(0xFFDFDFDF);
-                rectSh = colorCreateU32(0xFFCACACA);
-                tboxClr = colorCreateU32(0xFF505050);
+                clearClr = clrCreateU32(0xFFEBEBEB);
+                mnuTxt = clrCreateU32(0xFF000000);
+                txtClr = clrCreateU32(0xFFFFFFFF);
+                rectLt = clrCreateU32(0xFFDFDFDF);
+                rectSh = clrCreateU32(0xFFCACACA);
+                tboxClr = clrCreateU32(0xFF505050);
                 break;
 
             default:
@@ -89,12 +87,12 @@ namespace ui
                 buttonY = texLoadPNGFile("romfs:/img/button/buttonY_lght.png");
                 buttonMin = texLoadPNGFile("romfs:/img/button/buttonMin_lght.png");
 
-                clearClr = colorCreateU32(0xFF2D2D2D);
-                mnuTxt = colorCreateU32(0xFFFFFFFF);
-                txtClr = colorCreateU32(0xFF000000);
-                rectLt = colorCreateU32(0xFF505050);
-                rectSh = colorCreateU32(0xFF202020);
-                tboxClr = colorCreateU32(0xFFEBEBEB);
+                clearClr = clrCreateU32(0xFF2D2D2D);
+                mnuTxt = clrCreateU32(0xFFFFFFFF);
+                txtClr = clrCreateU32(0xFF000000);
+                rectLt = clrCreateU32(0xFF505050);
+                rectSh = clrCreateU32(0xFF202020);
+                tboxClr = clrCreateU32(0xFFEBEBEB);
                 break;
         }
 
@@ -118,8 +116,6 @@ namespace ui
         }
 
         advCopyMenuPrep();
-
-        fb = texGetFramebuffer();
     }
 
     void exit()
@@ -161,55 +157,55 @@ namespace ui
     void drawUI()
     {
         if(background == NULL)
-            texClearColor(fb, clearClr);
+            texClearColor(frameBuffer, clearClr);
         else
-            texDrawNoAlpha(background, fb, 0, 0);
+            texDrawNoAlpha(background, frameBuffer, 0, 0);
 
-        drawText(TITLE_TEXT, fb, shared, 16, 16, 32, mnuTxt);
+        drawText(TITLE_TEXT, frameBuffer, shared, 16, 16, 32, mnuTxt);
 
         switch(mstate)
         {
             case FLD_SEL:
-                drawRect(fb, 16, 64, 1248, 1, rectLt);
-                drawRect(fb, 16, 65, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 64, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 65, 1248, 2, rectSh);
 
-                drawRect(fb, 288, 65, 1, 592, rectLt);
-                drawRect(fb, 289, 65, 2, 592, rectSh);
+                drawRect(frameBuffer, 288, 65, 1, 592, rectLt);
+                drawRect(frameBuffer, 289, 65, 2, 592, rectSh);
 
-                drawRect(fb, 16, 656, 1248, 1, rectLt);
-                drawRect(fb, 16, 657, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 656, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 657, 1248, 2, rectSh);
                 break;
 
             case USR_SEL:
             case TTL_SEL:
-                drawRect(fb, 16, 64, 1248, 1, rectLt);
-                drawRect(fb, 16, 65, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 64, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 65, 1248, 2, rectSh);
 
-                drawRect(fb, 16, 656, 1248, 1, rectLt);
-                drawRect(fb, 16, 657, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 656, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 657, 1248, 2, rectSh);
                 break;
 
             case ADV_MDE:
-                drawRect(fb, 16, 64, 1248, 1, rectLt);
-                drawRect(fb, 16, 65, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 64, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 65, 1248, 2, rectSh);
 
-                drawRect(fb, 640, 64, 1, 592, rectLt);
-                drawRect(fb, 641, 64, 2, 592, rectSh);
+                drawRect(frameBuffer, 640, 64, 1, 592, rectLt);
+                drawRect(frameBuffer, 641, 64, 2, 592, rectSh);
 
-                drawRect(fb, 16, 656, 1248, 1, rectLt);
-                drawRect(fb, 16, 657, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 656, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 657, 1248, 2, rectSh);
                 break;
 
             case CLS_TTL:
             case CLS_USR:
-                drawRect(fb, 16, 64, 1248, 1, rectLt);
-                drawRect(fb, 16, 65, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 64, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 65, 1248, 2, rectSh);
 
-                drawRect(fb, 448, 64, 1, 592, rectLt);
-                drawRect(fb, 449, 64, 2, 592, rectSh);
+                drawRect(frameBuffer, 448, 64, 1, 592, rectLt);
+                drawRect(frameBuffer, 449, 64, 2, 592, rectSh);
 
-                drawRect(fb, 16, 656, 1248, 1, rectLt);
-                drawRect(fb, 16, 657, 1248, 2, rectSh);
+                drawRect(frameBuffer, 16, 656, 1248, 1, rectLt);
+                drawRect(frameBuffer, 16, 657, 1248, 2, rectSh);
                 break;
         }
 
@@ -220,12 +216,12 @@ namespace ui
                 {
                     //Input guide
                     unsigned startX = 848;
-                    texDraw(buttonA, fb, startX, 672);
-                    drawText("Select", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonY, fb, startX += 72, 672);
-                    drawText("Dump All", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonX, fb, startX += 96, 672);
-                    drawText("Classic Mode", fb, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonA, frameBuffer, startX, 672);
+                    drawText("Select", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonY, frameBuffer, startX += 72, 672);
+                    drawText("Dump All", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonX, frameBuffer, startX += 96, 672);
+                    drawText("Classic Mode", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
                 }
                 break;
 
@@ -233,12 +229,12 @@ namespace ui
             case CLS_TTL:
                 {
                     unsigned startX = 914;
-                    texDraw(buttonA, fb, startX, 672);
-                    drawText("Select", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonY, fb, startX += 72, 672);
-                    drawText("Dump All", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonB, fb, startX += 96, 672);
-                    drawText("Back", fb, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonA, frameBuffer, startX, 672);
+                    drawText("Select", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonY, frameBuffer, startX += 72, 672);
+                    drawText("Dump All", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonB, frameBuffer, startX += 96, 672);
+                    drawText("Back", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
                 }
                 break;
 
@@ -246,16 +242,16 @@ namespace ui
                 {
                     //Input guide
                     unsigned startX = 690;
-                    texDraw(buttonMin, fb, startX, 672);
-                    drawText("Adv. Mode", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonA, fb, startX += 100, 672);
-                    drawText("Backup", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonY, fb, startX += 72, 672);
-                    drawText("Restore", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonX, fb, startX += 72, 672);
-                    drawText("Delete", fb, shared, startX += 38, 680, 14, mnuTxt);
-                    texDraw(buttonB, fb, startX += 72, 672);
-                    drawText("Back", fb, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonMin, frameBuffer, startX, 672);
+                    drawText("Adv. Mode", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonA, frameBuffer, startX += 100, 672);
+                    drawText("Backup", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonY, frameBuffer, startX += 72, 672);
+                    drawText("Restore", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonX, frameBuffer, startX += 72, 672);
+                    drawText("Delete", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
+                    texDraw(buttonB, frameBuffer, startX += 72, 672);
+                    drawText("Back", frameBuffer, shared, startX += 38, 680, 14, mnuTxt);
                 }
                 break;
         }

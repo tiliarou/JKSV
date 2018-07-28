@@ -133,7 +133,7 @@ namespace ui
         }
     }
 
-    void menu::draw(const color& textClr)
+    void menu::draw(const clr& textClr)
     {
         if(clrAdd)
         {
@@ -154,14 +154,14 @@ namespace ui
         else
             length = start + 15;
 
-        color rectClr = colorCreateRGBA(0x00, 0x60 + clrSh, 0xBB + clrSh, 0xFF);
+        clr rectClr = clrCreateRGBA(0x00, 0x60 + clrSh, 0xBB + clrSh, 0xFF);
 
         for(int i = start; i < length; i++)
         {
             if(i == selected)
-                drawRect(ui::fb, x, y + ((i - start) * 36), rW, 32, rectClr);
+                drawRect(frameBuffer, x, y + ((i - start) * 36), rW, 32, rectClr);
 
-            drawText(opt[i].c_str(), ui::fb, shared, x, (y + 8) + ((i - start) * 36), 16, textClr);
+            drawText(opt[i].c_str(), frameBuffer, shared, x, (y + 8) + ((i - start) * 36), 16, textClr);
         }
     }
 
