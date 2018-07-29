@@ -6,6 +6,8 @@
 #include "file.h"
 #include "util.h"
 
+std::string title;
+
 namespace ui
 {
     void updateTitleMenu(const uint64_t& down, const uint64_t& held, const touchPosition& p)
@@ -81,7 +83,7 @@ namespace ui
                             selRectY -= 24;
                     }
 
-                    std::string title = data::curUser.titles[selected].getTitle();
+                    title = data::curUser.titles[selected].getTitle();
                     unsigned titleWidth = textGetWidth(title.c_str(), ui::shared, 16);
                     int rectWidth = titleWidth + 32, rectX = (tX + 64) - (rectWidth / 2);
                     if(rectX < 16)

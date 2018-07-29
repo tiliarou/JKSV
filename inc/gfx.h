@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define MAX_GFXCMD_DEFAULT 128
+#define MAX_GFXCMD_DEFAULT 512
 
 #ifdef __cplusplus
 extern "C"

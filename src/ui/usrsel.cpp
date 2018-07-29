@@ -6,6 +6,8 @@
 #include "uiupdate.h"
 #include "file.h"
 
+std::string username;
+
 namespace ui
 {
     void updateUserMenu(const uint64_t& down, const uint64_t& held, const touchPosition& p)
@@ -73,7 +75,7 @@ namespace ui
                             selRectX -= 24;
                     }
 
-                    std::string username = data::users[selected].getUsername();
+                    username = data::users[selected].getUsername();
                     unsigned userWidth = textGetWidth(username.c_str(), ui::shared, 16);
                     int userRectWidth = userWidth + 32, userRectX = (tX + 64) - (userRectWidth  / 2);
                     if(userRectX < 16)

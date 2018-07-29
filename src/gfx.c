@@ -54,6 +54,7 @@ void gfxProcFunc(void *args)
                 drawRect_t(proc->argStruct);
                 break;
         }
+        svcSleepThread(10000 * (threadID + 1));
     }
 }
 
