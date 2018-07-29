@@ -34,7 +34,7 @@ extern "C"
 int main(int argc, const char *argv[])
 {
     fs::init();
-    graphicsInit(1280, 720, MAX_GFXCMD_DEFAULT);
+    graphicsInit(1280, 720, 512);
     data::loadDataInfo();
     ui::init();
 

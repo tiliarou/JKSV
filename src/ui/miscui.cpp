@@ -159,6 +159,7 @@ namespace ui
             ok.draw();
             texDrawInvert(ui::buttonA, frameBuffer, ok.getTx() + 56, ok.getTy() - 4);
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
     }
@@ -187,6 +188,7 @@ namespace ui
             drawText(tmp, frameBuffer, shared, 272, 144, 48, txtClr);
             ok.draw();
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
     }
@@ -229,6 +231,7 @@ namespace ui
             no.draw();
             texDrawInvert(ui::buttonB, frameBuffer, no.getTx() + 56, no.getTy() - 4);
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
 

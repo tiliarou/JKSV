@@ -194,6 +194,7 @@ namespace ui
 
             draw();
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
 

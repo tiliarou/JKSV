@@ -143,6 +143,7 @@ namespace fs
 
             prog.draw(copyString);
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
 
@@ -176,6 +177,7 @@ namespace fs
 
             prog.draw(copyString);
 
+            gfxProcQueue();
             gfxHandleBuffs();
         }
 
