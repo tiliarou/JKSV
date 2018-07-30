@@ -12,7 +12,7 @@ typedef struct
 {
     FT_Library lib;
     //Threading needs faces for each thread for safety
-    FT_Face    face[3];
+    FT_Face    face[2];
     FT_Error libRet, faceRet;
     //Loads TTF to memory for speed
     uint8_t *fntData;

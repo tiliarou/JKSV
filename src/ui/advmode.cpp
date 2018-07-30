@@ -471,7 +471,7 @@ namespace ui
         //draw copy menu if it's supposed to be up
         if(advMenuCtrl == 2)
         {
-            ui::drawTextbox(464, 236, 320, 268);
+            ui::drawTextbox(464, 236, 320, 268, false);
 
             switch(advPrev)
             {

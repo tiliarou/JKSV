@@ -84,7 +84,7 @@ namespace ui
     bool confirm(const std::string& q);
     bool confirmTransfer(const std::string& f, const std::string& t);
     bool confirmDelete(const std::string& p);
-    void drawTextbox(unsigned x, unsigned y, unsigned w, unsigned h);
+    void drawTextbox(unsigned x, unsigned y, unsigned w, unsigned h, bool lock);
 }
 
 #endif // MISCUI_H

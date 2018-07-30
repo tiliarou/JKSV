@@ -12,19 +12,19 @@ gfxCmd **gfxCmdBuf;
 static int cmdCur = 0, cmdAdd = 0, cmdMax = 0;
 
 //Framebuffer lock
-bool fbLock = false;
+static bool fbLock = false;
 
-inline void waitForBufferLock()
+inline static void waitForBufferLock()
 {
-    while(fbLock){ svcSleepThread(10); }
+    while(fbLock){ svcSleepThread(1); }
 }
 
-inline void lockFB()
+inline static void lockFB()
 {
     fbLock = true;
 }
 
-inline void unlockFB()
+inline static void unlockFB()
 {
     fbLock = false;
 }
@@ -45,12 +45,10 @@ void gfxProcFunc(void *args)
         {
             case DRAW_TEXT:
                 {
-
                     //Send the faceID to use according to thread
                     textArgs *tmp = (textArgs *)proc->argStruct;
                     tmp->faceID = threadID;
                     drawText_t(proc->argStruct);
-
                 }
                 break;
 
@@ -78,7 +76,8 @@ void gfxProcFunc(void *args)
                 drawRect_t(proc->argStruct);
                 break;
         }
-        unlockFB();
+        if(proc->lock)
+            unlockFB();
     }
 }
 
@@ -149,11 +148,8 @@ void gfxProcQueue()
     Thread gfxThread[2];
     threadCreate(&gfxThread[0], gfxProcFunc, (void *)0, 0x5000, 0x2C, 1);
     threadStart(&gfxThread[0]);
-    svcSleepThread(100000);
     threadCreate(&gfxThread[1], gfxProcFunc, (void *)1, 0x5000, 0x2C, 2);
     threadStart(&gfxThread[1]);
-    svcSleepThread(100000);
-    gfxProcFunc((void *)2);
 
     threadWaitForExit(&gfxThread[0]);
     threadClose(&gfxThread[0]);

@@ -92,7 +92,7 @@ namespace ui
                 clrAdd = true;
         }
 
-        drawRect(frameBuffer, 0, 176, 1280, 64, clrCreateU32(0xFFFFFFFF), true);
+        drawRect(frameBuffer, 0, 176, 1280, 64, clrCreateU32(0xFFFFFFFF), false);
         drawRect(frameBuffer, 0, 240, 1280, 480, clrCreateU32(0xFF2D2D2D), true);
 
         clr rectClr = clrCreateRGBA(0x00, 0x60 + clrSh, 0xBB + clrSh, 0xFF);

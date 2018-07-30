@@ -84,7 +84,7 @@ namespace ui
                     if(userRectX + userRectWidth > 1264)
                         userRectX = 1264 - userRectWidth;
 
-                    drawTextbox(userRectX, y - 50, userRectWidth, 38);
+                    drawTextbox(userRectX, y - 50, userRectWidth, 38, false);
                     drawText(username.c_str(), frameBuffer, ui::shared, userRectX + 16, y - 38, 16, txtClr, false);
                 }
 

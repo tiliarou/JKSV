@@ -84,13 +84,6 @@ font *fontLoadTTF(const char *path)
         return NULL;
     }
 
-    if((ret->faceRet = FT_New_Memory_Face(ret->lib, ret->fntData, ttfSize, 0, &ret->face[2])))
-    {
-        free(ret->fntData);
-        free(ret);
-        return NULL;
-    }
-
     return ret;
 }
 
