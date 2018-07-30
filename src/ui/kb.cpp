@@ -92,18 +92,18 @@ namespace ui
                 clrAdd = true;
         }
 
-        drawRect(frameBuffer, 0, 176, 1280, 64, clrCreateU32(0xFFFFFFFF));
-        drawRect(frameBuffer, 0, 240, 1280, 480, clrCreateU32(0xFF2D2D2D));
+        drawRect(frameBuffer, 0, 176, 1280, 64, clrCreateU32(0xFFFFFFFF), true);
+        drawRect(frameBuffer, 0, 240, 1280, 480, clrCreateU32(0xFF2D2D2D), true);
 
         clr rectClr = clrCreateRGBA(0x00, 0x60 + clrSh, 0xBB + clrSh, 0xFF);
 
         //Draw sel rectangle around key for controller
-        drawRect(frameBuffer, keys[selKey].getX() - 4, keys[selKey].getY() - 4, keys[selKey].getW() + 8, keys[selKey].getH() + 8, rectClr);
+        drawRect(frameBuffer, keys[selKey].getX() - 4, keys[selKey].getY() - 4, keys[selKey].getW() + 8, keys[selKey].getH() + 8, rectClr, true);
 
         for(unsigned i = 0; i < keys.size(); i++)
             keys[i].draw();
 
-        drawText(str.c_str(), frameBuffer, ui::shared, 16, 192, 32, clrCreateU32(0xFF000000));
+        drawText(str.c_str(), frameBuffer, ui::shared, 16, 192, 32, clrCreateU32(0xFF000000), false);
     }
 
     std::string keyboard::getString(const std::string& def)

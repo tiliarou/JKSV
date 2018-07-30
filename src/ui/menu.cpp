@@ -159,9 +159,9 @@ namespace ui
         for(int i = start; i < length; i++)
         {
             if(i == selected)
-                drawRect(frameBuffer, x, y + ((i - start) * 36), rW, 32, rectClr);
+                drawRect(frameBuffer, x, y + ((i - start) * 36), rW, 32, rectClr, false);
 
-            drawText(opt[i].c_str(), frameBuffer, shared, x, (y + 8) + ((i - start) * 36), 16, textClr);
+            drawText(opt[i].c_str(), frameBuffer, shared, x, (y + 8) + ((i - start) * 36), 16, textClr, false);
         }
     }
 

@@ -212,10 +212,10 @@ void texClearColor(tex *in, const clr c)
         *dataPtr++ = clr;
 }
 
-void texDraw(const tex *t, tex *target, int x, int y)
+void texDraw(const tex *t, tex *target, int x, int y, bool lock)
 {
     texArgs *args = texArgsCreate(t, target, x, y);
-    gfxCmd *cmd = gfxCmdCreate(DRAW_IMG, args);
+    gfxCmd *cmd = gfxCmdCreate(DRAW_IMG, lock, args);
     gfxCmdAddToQueue(cmd);
 }
 
@@ -249,10 +249,10 @@ void texDraw_t(void *argStruct)
     }
 }
 
-void texDrawNoAlpha(const tex *t, tex *target, int x, int y)
+void texDrawNoAlpha(const tex *t, tex *target, int x, int y, bool lock)
 {
     texArgs *args = texArgsCreate(t, target, x, y);
-    gfxCmd *add = gfxCmdCreate(DRAW_IMG_NO_ALPHA, args);
+    gfxCmd *add = gfxCmdCreate(DRAW_IMG_NO_ALPHA, lock, args);
     gfxCmdAddToQueue(add);
 }
 
@@ -282,10 +282,10 @@ void texDrawNoAlpha_t(void *argStruct)
     }
 }
 
-void texDrawSkip(const tex *t, tex *target, int x, int y)
+void texDrawSkip(const tex *t, tex *target, int x, int y, bool lock)
 {
     texArgs *args = texArgsCreate(t, target, x, y);
-    gfxCmd *add = gfxCmdCreate(DRAW_IMG_SKIP, args);
+    gfxCmd *add = gfxCmdCreate(DRAW_IMG_SKIP, lock, args);
     gfxCmdAddToQueue(add);
 }
 
@@ -320,10 +320,10 @@ void texDrawSkip_t(void *argStruct)
     }
 }
 
-void texDrawSkipNoAlpha(const tex *t, tex *target, int x, int y)
+void texDrawSkipNoAlpha(const tex *t, tex *target, int x, int y, bool lock)
 {
     texArgs *args = texArgsCreate(t, target, x, y);
-    gfxCmd *add = gfxCmdCreate(DRAW_IMG_SKIP_NO_ALPHA, args);
+    gfxCmd *add = gfxCmdCreate(DRAW_IMG_SKIP_NO_ALPHA, lock, args);
     gfxCmdAddToQueue(add);
 }
 
@@ -357,10 +357,10 @@ void texDrawSkipNoAlpha_t(void *argStruct)
     }
 }
 
-void texDrawInvert(const tex *t, tex *target, int x, int y)
+void texDrawInvert(const tex *t, tex *target, int x, int y, bool lock)
 {
     texArgs *args = texArgsCreate(t, target, x, y);
-    gfxCmd *add = gfxCmdCreate(DRAW_IMG_INVERT, args);
+    gfxCmd *add = gfxCmdCreate(DRAW_IMG_INVERT, lock, args);
     gfxCmdAddToQueue(add);
 }
 

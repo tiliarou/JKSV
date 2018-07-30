@@ -11,8 +11,8 @@
 typedef struct
 {
     FT_Library lib;
-    //Threading needs two faces for safety
-    FT_Face    face[2];
+    //Threading needs faces for each thread for safety
+    FT_Face    face[3];
     FT_Error libRet, faceRet;
     //Loads TTF to memory for speed
     uint8_t *fntData;
@@ -27,6 +27,7 @@ typedef struct
     int x, y, sz;
     clr c;
     int faceID;
+    bool lock;
 } textArgs;
 
 //Loads Switch's shared font
@@ -39,7 +40,7 @@ font *fontLoadTTF(const char *path);
 void fontDestroy(font *f);
 
 //draws text using font f
-void drawText(const char *str, tex *target, font *f, int x, int y, int sz, clr c);
+void drawText(const char *str, tex *target, font *f, int x, int y, int sz, clr c, bool lock);
 void drawText_t(void *argStruct);
 
 size_t textGetWidth(const char *str, const font *f, int sz);

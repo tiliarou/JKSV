@@ -24,12 +24,12 @@ namespace ui
     void progBar::draw(const std::string& text)
     {
         ui::drawTextbox(64, 240, 1152, 240);
-        drawRect(frameBuffer, 96, 400, 1088, 64, clrCreateU32(0xFF000000));
-        drawRect(frameBuffer, 96, 400, (unsigned)width, 64, clrCreateU32(0xFF00CC00));
+        drawRect(frameBuffer, 96, 400, 1088, 64, clrCreateU32(0xFF000000), true);
+        drawRect(frameBuffer, 96, 400, (unsigned)width, 64, clrCreateU32(0xFF00CC00), true);
 
         //char tmp[64];
         //sprintf(tmp, "%u / %u", (unsigned)prog, (unsigned)max);
-        drawText(text.c_str(), frameBuffer, ui::shared, 80, 256, 24, txtClr);
+        drawText(text.c_str(), frameBuffer, ui::shared, 80, 256, 24, txtClr, false);
         //gfx::drawText(tmp, 80, 320, 64, 0x000000FF);
     }
 
@@ -87,11 +87,11 @@ namespace ui
     void button::draw()
     {
         if(pressed)
-            drawRect(frameBuffer, x, y, w, h, clrCreateU32(0xFF0D0D0D));
+            drawRect(frameBuffer, x, y, w, h, clrCreateU32(0xFF0D0D0D), true);
         else
             ui::drawTextbox(x, y, w, h);
 
-        drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr);
+        drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr, false);
     }
 
     void touchTrack::update(const touchPosition& p)
@@ -155,9 +155,9 @@ namespace ui
                 break;
 
             ui::drawTextbox(256, 128, 768, 464);
-            drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr);
+            drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr, false);
             ok.draw();
-            texDrawInvert(ui::buttonA, frameBuffer, ok.getTx() + 56, ok.getTy() - 4);
+            texDrawInvert(ui::buttonA, frameBuffer, ok.getTx() + 56, ok.getTy() - 4, false);
 
             gfxProcQueue();
             gfxHandleBuffs();
@@ -185,7 +185,7 @@ namespace ui
                 break;
 
             ui::drawTextbox(256, 128, 768, 464);
-            drawText(tmp, frameBuffer, shared, 272, 144, 48, txtClr);
+            drawText(tmp, frameBuffer, shared, 272, 144, 48, txtClr, false);
             ok.draw();
 
             gfxProcQueue();
@@ -225,11 +225,11 @@ namespace ui
             }
 
             ui::drawTextbox(256, 128, 768, 464);
-            drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr);
+            drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr, false);
             yes.draw();
-            texDrawInvert(ui::buttonA, frameBuffer, yes.getTx() + 64, yes.getTy() - 4);
+            texDrawInvert(ui::buttonA, frameBuffer, yes.getTx() + 64, yes.getTy() - 4, false);
             no.draw();
-            texDrawInvert(ui::buttonB, frameBuffer, no.getTx() + 56, no.getTy() - 4);
+            texDrawInvert(ui::buttonB, frameBuffer, no.getTx() + 56, no.getTy() - 4, false);
 
             gfxProcQueue();
             gfxHandleBuffs();
@@ -255,17 +255,17 @@ namespace ui
     void drawTextbox(unsigned x, unsigned y, unsigned w, unsigned h)
     {
         //Top
-        texDraw(ui::cornerTopLeft, frameBuffer, x, y);
-        drawRect(frameBuffer, x + 32, y, w - 64, 32, ui::tboxClr);
-        texDraw(ui::cornerTopRight, frameBuffer, (x + w) - 32, y);
+        texDraw(ui::cornerTopLeft, frameBuffer, x, y, false);
+        drawRect(frameBuffer, x + 32, y, w - 64, 32, ui::tboxClr, false);
+        texDraw(ui::cornerTopRight, frameBuffer, (x + w) - 32, y, false);
 
         //middle
-        drawRect(frameBuffer, x, y + 32,  w, h - 64, tboxClr);
+        drawRect(frameBuffer, x, y + 32,  w, h - 64, tboxClr, false);
 
         //bottom
-        texDraw(ui::cornerBottomLeft, frameBuffer, x, (y + h) - 32);
-        drawRect(frameBuffer, x + 32, (y + h) - 32, w - 64, 32, tboxClr);
-        texDraw(ui::cornerBottomRight, frameBuffer, (x + w) - 32, (y + h) - 32);
+        texDraw(ui::cornerBottomLeft, frameBuffer, x, (y + h) - 32, false);
+        drawRect(frameBuffer, x + 32, (y + h) - 32, w - 64, 32, tboxClr, false);
+        texDraw(ui::cornerBottomRight, frameBuffer, (x + w) - 32, (y + h) - 32, false);
 
     }
 }

@@ -29,24 +29,24 @@ void texDestroy(tex *t);
 void texClearColor(tex *t, const clr c);
 
 //Draws t at x, y on target
-void texDraw(const tex *t, tex *target, int x, int y);
+void texDraw(const tex *t, tex *target, int x, int y, bool lock);
 //For threads
 void texDraw_t(void *argStruct);
 
 //Same as above, but without alpha blending for speed
-void texDrawNoAlpha(const tex *t, tex *target, int x, int y);
+void texDrawNoAlpha(const tex *t, tex *target, int x, int y, bool lock);
 void texDrawNoAlpha_t(void *argStruct);
 
 //Skips every other pixel + row
-void texDrawSkip(const tex *t, tex *target, int x, int y);
+void texDrawSkip(const tex *t, tex *target, int x, int y,  bool lock);
 void texDrawSkip_t(void *argStruct);
 
 //^ - alpha
-void texDrawSkipNoAlpha(const tex *t, tex *target, int x, int y);
+void texDrawSkipNoAlpha(const tex *t, tex *target, int x, int y, bool lock);
 void texDrawSkipNoAlpha_t(void *argStruct);
 
 //Inverts img colors then draws
-void texDrawInvert(const tex *t, tex *target, int x, int y);
+void texDrawInvert(const tex *t, tex *target, int x, int y, bool lock);
 void texDrawInvert_t(void *argStruct);
 
 //Swaps old for new

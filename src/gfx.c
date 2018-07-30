@@ -9,7 +9,25 @@
 gfxCmd **gfxCmdBuf;
 
 //cmd count related stuff
-static volatile int cmdCur = 0, cmdAdd = 0, cmdMax = 0;
+static int cmdCur = 0, cmdAdd = 0, cmdMax = 0;
+
+//Framebuffer lock
+bool fbLock = false;
+
+inline void waitForBufferLock()
+{
+    while(fbLock){ svcSleepThread(10); }
+}
+
+inline void lockFB()
+{
+    fbLock = true;
+}
+
+inline void unlockFB()
+{
+    fbLock = false;
+}
 
 tex *frameBuffer;
 
@@ -19,14 +37,20 @@ void gfxProcFunc(void *args)
     int threadID = (int)(args);
     while(cmdCur < cmdMax - 1 && (proc = gfxCmdBuf[cmdCur++]) != NULL)
     {
+        waitForBufferLock();
+        if(proc->lock)
+            lockFB();
+
         switch(proc->cmd)
         {
             case DRAW_TEXT:
                 {
+
                     //Send the faceID to use according to thread
                     textArgs *tmp = (textArgs *)proc->argStruct;
                     tmp->faceID = threadID;
                     drawText_t(proc->argStruct);
+
                 }
                 break;
 
@@ -54,7 +78,7 @@ void gfxProcFunc(void *args)
                 drawRect_t(proc->argStruct);
                 break;
         }
-        svcSleepThread(10000 * (threadID + 1));
+        unlockFB();
     }
 }
 
@@ -95,10 +119,11 @@ void gfxHandleBuffs()
     gfxWaitForVsync();
 }
 
-gfxCmd *gfxCmdCreate(int cmd, void *argStruct)
+gfxCmd *gfxCmdCreate(int cmd, bool lock, void *argStruct)
 {
     gfxCmd *ret = malloc(sizeof(gfxCmd));
     ret->cmd = cmd;
+    ret->lock = lock;
     ret->argStruct = argStruct;
     return ret;
 }
@@ -121,13 +146,19 @@ void gfxProcQueue()
 {
     cmdCur = 0;
 
-    Thread gfxThread;
-    threadCreate(&gfxThread, gfxProcFunc, 0, 0x5000, 0x2D, 1);
-    threadStart(&gfxThread);
-    svcSleepThread(1000000);
-    gfxProcFunc((void *)1);
-    threadWaitForExit(&gfxThread);
-    threadClose(&gfxThread);
+    Thread gfxThread[2];
+    threadCreate(&gfxThread[0], gfxProcFunc, (void *)0, 0x5000, 0x2C, 1);
+    threadStart(&gfxThread[0]);
+    svcSleepThread(100000);
+    threadCreate(&gfxThread[1], gfxProcFunc, (void *)1, 0x5000, 0x2C, 2);
+    threadStart(&gfxThread[1]);
+    svcSleepThread(100000);
+    gfxProcFunc((void *)2);
+
+    threadWaitForExit(&gfxThread[0]);
+    threadClose(&gfxThread[0]);
+    threadWaitForExit(&gfxThread[1]);
+    threadClose(&gfxThread[1]);
 
     //reset
     cmdAdd = 0;
@@ -148,7 +179,7 @@ typedef struct
     clr c;
 } rectArgs;
 
-void drawRect(tex *target, int x, int y, int w, int h, clr c)
+void drawRect(tex *target, int x, int y, int w, int h, clr c, bool locked)
 {
     rectArgs *args = malloc(sizeof(rectArgs));
     args->target = target;
@@ -158,7 +189,7 @@ void drawRect(tex *target, int x, int y, int w, int h, clr c)
     args->h = h;
     args->c = c;
 
-    gfxCmd *add = gfxCmdCreate(DRAW_RECT, args);
+    gfxCmd *add = gfxCmdCreate(DRAW_RECT, locked, args);
     gfxCmdAddToQueue(add);
 }
 
@@ -175,7 +206,7 @@ void drawRect_t(void *argStruct)
             continue;
 
         uint32_t *rowPtr = &target->data[tY * target->width + x];
-        for(int tX = x; tX < x + w; tX++, rowPtr)
+        for(int tX = x; tX < x + w; tX++)
         {
             if(tX < 0 || tX > target->width)
                 continue;

@@ -47,7 +47,7 @@ namespace ui
             endUser = data::users.size();
 
         texSwapColors(ui::selBox, clrPrev, clrUpdt);
-        texDraw(ui::selBox, frameBuffer, selRectX, selRectY);
+        texDraw(ui::selBox, frameBuffer, selRectX, selRectY, false);
 
         for(unsigned i = start; i < endUser; y += 144)
         {
@@ -85,10 +85,10 @@ namespace ui
                         userRectX = 1264 - userRectWidth;
 
                     drawTextbox(userRectX, y - 50, userRectWidth, 38);
-                    drawText(username.c_str(), frameBuffer, ui::shared, userRectX + 16, y - 38, 16, txtClr);
+                    drawText(username.c_str(), frameBuffer, ui::shared, userRectX + 16, y - 38, 16, txtClr, false);
                 }
 
-                texDrawSkipNoAlpha(data::users[i].userIcon, frameBuffer, tX, y);
+                texDrawSkipNoAlpha(data::users[i].userIcon, frameBuffer, tX, y, false);
             }
         }
 

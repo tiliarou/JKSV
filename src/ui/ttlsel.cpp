@@ -54,7 +54,7 @@ namespace ui
             endTitle = data::curUser.titles.size();
 
         //draw Rect so it's always behind icons
-        texDraw(ui::selBox, frameBuffer, selRectX, selRectY);
+        texDraw(ui::selBox, frameBuffer, selRectX, selRectY, true);
 
         for(unsigned i = start; i < endTitle; y += 144)
         {
@@ -93,7 +93,7 @@ namespace ui
                         rectX = 1264 - rectWidth;
 
                     drawTextbox(rectX, y - 50, rectWidth, 38);
-                    drawText(title.c_str(), frameBuffer, ui::shared, rectX + 16, y - 38, 16, txtClr);
+                    drawText(title.c_str(), frameBuffer, ui::shared, rectX + 16, y - 38, 16, txtClr, false);
                 }
                 data::curUser.titles[i].icon.drawHalf(tX, y);
             }

@@ -2,6 +2,7 @@
 #define GFX_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MAX_GFXCMD_DEFAULT 512
 
@@ -28,6 +29,7 @@ typedef enum
 typedef struct
 {
     int cmd;
+    bool lock;
     void *argStruct;
 } gfxCmd;
 
@@ -36,12 +38,12 @@ void graphicsExit();
 void gfxHandleBuffs();
 extern tex *frameBuffer;
 
-gfxCmd *gfxCmdCreate(int cmd, void *argStruct);
+gfxCmd *gfxCmdCreate(int cmd, bool lock, void *argStruct);
 void gfxCmdDestroy(gfxCmd *g);
 void gfxCmdAddToQueue(gfxCmd *g);
 void gfxProcQueue();
 
-void drawRect(tex *target, int x, int y, int w, int h, clr c);
+void drawRect(tex *target, int x, int y, int w, int h, clr c, bool lock);
 void drawRect_t(void *argStruct);
 
 #ifdef __cplusplus

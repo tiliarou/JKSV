@@ -84,6 +84,13 @@ font *fontLoadTTF(const char *path)
         return NULL;
     }
 
+    if((ret->faceRet = FT_New_Memory_Face(ret->lib, ret->fntData, ttfSize, 0, &ret->face[2])))
+    {
+        free(ret->fntData);
+        free(ret);
+        return NULL;
+    }
+
     return ret;
 }
 
@@ -130,10 +137,10 @@ static void drawGlyph(const FT_Bitmap *bmp, tex *target, int _x, int _y, const c
     }
 }
 
-void drawText(const char *str, tex *target, font *f, int x, int y, int sz, clr c)
+void drawText(const char *str, tex *target, font *f, int x, int y, int sz, clr c, bool locked)
 {
     textArgs *args = textArgsCreate(str, target, f, x, y, sz, c);
-    gfxCmd *cmd = gfxCmdCreate(DRAW_TEXT, args);
+    gfxCmd *cmd = gfxCmdCreate(DRAW_TEXT, locked, args);
     gfxCmdAddToQueue(cmd);
 }
 
