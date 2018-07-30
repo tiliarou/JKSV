@@ -171,8 +171,16 @@ void drawRect_t(void *argStruct)
 
     for(int tY = y; tY < y + h; tY++)
     {
+        if(tY < 0 || tY > target->height)
+            continue;
+
         uint32_t *rowPtr = &target->data[tY * target->width + x];
-        for(int tX = x; tX < x + w; tX++, rowPtr++)
-            *rowPtr = color;
+        for(int tX = x; tX < x + w; tX++, rowPtr)
+        {
+            if(tX < 0 || tX > target->width)
+                continue;
+
+            *rowPtr++ = color;
+        }
     }
 }
