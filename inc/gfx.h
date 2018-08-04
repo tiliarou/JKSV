@@ -23,7 +23,8 @@ typedef enum
     DRAW_IMG_SKIP,
     DRAW_IMG_SKIP_NO_ALPHA,
     DRAW_IMG_INVERT,
-    DRAW_RECT
+    DRAW_RECT,
+    DRAW_RECT_ALPHA
 } gfxCommands;
 
 typedef struct
@@ -45,6 +46,9 @@ void gfxProcQueue();
 
 void drawRect(tex *target, int x, int y, int w, int h, clr c, bool lock);
 void drawRect_t(void *argStruct);
+
+void drawRectAlpha(tex *target, int x, int y, int w, int h, clr c, bool lock);
+void drawRectAlpha_t(void *argStruct);
 
 #ifdef __cplusplus
 }

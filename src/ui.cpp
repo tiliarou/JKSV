@@ -11,7 +11,7 @@
 #include "util.h"
 #include "file.h"
 
-#define TITLE_TEXT "JKSV - 07/29/2018 - MultiThread GFX Test"
+#define TITLE_TEXT "JKSV - 08/03/2018 - MultiThread GFX Test"
 
 //Secret background that can be drawn from "/JKSV/back.jpg"
 static tex *background = NULL;
@@ -31,7 +31,7 @@ namespace ui
     std::vector<ui::button> selButtons;
 
     //UI colors
-    clr clearClr, mnuTxt, txtClr, rectLt, rectSh, tboxClr;
+    clr clearClr, mnuTxt, txtClr, rectLt, rectSh, tboxClr, rectSide;
 
     //textbox pieces
     //I was going to flip them when I draw them, but then laziness kicked in.
@@ -70,6 +70,7 @@ namespace ui
                 rectLt = clrCreateU32(0xFFDFDFDF);
                 rectSh = clrCreateU32(0xFFCACACA);
                 tboxClr = clrCreateU32(0xFF505050);
+                rectSide = clrCreateU32(0xBBDCDCDC);
                 break;
 
             default:
@@ -93,6 +94,7 @@ namespace ui
                 rectLt = clrCreateU32(0xFF505050);
                 rectSh = clrCreateU32(0xFF202020);
                 tboxClr = clrCreateU32(0xFFEBEBEB);
+                rectSide = clrCreateU32(0xBB373737);
                 break;
         }
 
@@ -169,8 +171,7 @@ namespace ui
                 drawRect(frameBuffer, 16, 64, 1248, 1, rectLt, false);
                 drawRect(frameBuffer, 16, 65, 1248, 2, rectSh, false);
 
-                drawRect(frameBuffer, 288, 65, 1, 592, rectLt, false);
-                drawRect(frameBuffer, 289, 65, 2, 592, rectSh, false);
+                drawRectAlpha(frameBuffer, 16, 66, 448, 592, rectSide, false);
 
                 drawRect(frameBuffer, 16, 656, 1248, 1, rectLt, false);
                 drawRect(frameBuffer, 16, 657, 1248, 2, rectSh, false);
@@ -201,8 +202,7 @@ namespace ui
                 drawRect(frameBuffer, 16, 64, 1248, 1, rectLt, false);
                 drawRect(frameBuffer, 16, 65, 1248, 2, rectSh, false);
 
-                drawRect(frameBuffer, 448, 64, 1, 592, rectLt, false);
-                drawRect(frameBuffer, 449, 64, 2, 592, rectSh, false);
+                drawRectAlpha(frameBuffer, 16, 66, 448, 592, rectSide, false);
 
                 drawRect(frameBuffer, 16, 656, 1248, 1, rectLt, false);
                 drawRect(frameBuffer, 16, 657, 1248, 2, rectSh, false);

@@ -229,12 +229,13 @@ void texDraw_t(void *argStruct)
      if(t != NULL)
     {
         uint32_t *dataPtr = &t->data[0];
+        uint32_t *rowPtr = NULL;
         for(int tY = y; tY < y + t->height; tY++)
         {
             if(tY < 0 || tY > target->height)
                 continue;
 
-            uint32_t *rowPtr = &target->data[tY * target->width + x];
+            rowPtr = &target->data[tY * target->width + x];
             for(int tX = x; tX < x + t->width; tX++, rowPtr++)
             {
                 if(tX < 0 || tX > target->width)
@@ -265,12 +266,13 @@ void texDrawNoAlpha_t(void *argStruct)
     if(t != NULL)
     {
         uint32_t *dataPtr = &t->data[0];
+        uint32_t *rowPtr = NULL;
         for(int tY = y; tY < y + t->height; tY++)
         {
             if(tY < 0 || tY > target->height)
                 continue;
 
-            uint32_t *rowPtr = &target->data[tY * target->width + x];
+            rowPtr = &target->data[tY * target->width + x];
             for(int tX = x; tX < x + t->width; tX++)
             {
                 if(tX < 0 || tX > target->width)
@@ -299,12 +301,13 @@ void texDrawSkip_t(void *argStruct)
     if(t != NULL)
     {
         uint32_t *dataPtr = &t->data[0];
+        uint32_t *rowPtr = NULL;
         for(int tY = y; tY < y + (t->height / 2); tY++, dataPtr += t->width)
         {
             if(tY < 0 || tY > target->height)
                 continue;
 
-            uint32_t *rowPtr = &target->data[tY * target->width + x];
+            rowPtr = &target->data[tY * target->width + x];
             for(int tX = x; tX < x + (t->width / 2); tX++, rowPtr++)
             {
                 if(tX < 0 || tX > target->width)
@@ -337,12 +340,13 @@ void texDrawSkipNoAlpha_t(void *argStruct)
     if(t != NULL)
     {
         uint32_t *dataPtr = &t->data[0];
+        uint32_t *rowPtr = NULL;
         for(int tY = y; tY < y + (t->height / 2); tY++, dataPtr += t->width)
         {
             if(tY < 0 || tY > target->height)
                 continue;
 
-            uint32_t *rowPtr = &target->data[tY * target->width + x];
+            rowPtr = &target->data[tY * target->width + x];
             for(int tX = x; tX < x + (t->width / 2); tX++, rowPtr++)
             {
                 if(tX < 0 || tX > target->width)
@@ -374,18 +378,19 @@ void texDrawInvert_t(void *argStruct)
     if(t != NULL)
     {
         uint32_t *dataPtr = &t->data[0];
+        uint32_t *rowPtr = NULL;
         for(int tY = y; tY < y + t->height; tY++)
         {
             if(tY < 0 || tY > target->height)
                 continue;
 
-            uint32_t *rowPtr = &target->data[tY * target->width + x];
+            rowPtr = &target->data[tY * target->width + x];
             for(int tX = x; tX < x + t->width; tX++, rowPtr++)
             {
                 if(tX < 0 || tX > target->width)
                     continue;
 
-                clr dataClr = clrCreateU32(*dataPtr);
+                clr dataClr = clrCreateU32(*dataPtr++);
                 clrInvert(&dataClr);
                 clr fbClr = clrCreateU32(*rowPtr);
 

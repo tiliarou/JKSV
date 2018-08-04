@@ -28,7 +28,8 @@ void texDestroy(tex *t);
 //Clears tex with c
 void texClearColor(tex *t, const clr c);
 
-//Draws t at x, y on target
+//Draws t at x, y on target. Lock being true prevents any drawing until this one is finished
+//This is only for stuff that absolutely needs to be drawn for layers
 void texDraw(const tex *t, tex *target, int x, int y, bool lock);
 //For threads
 void texDraw_t(void *argStruct);

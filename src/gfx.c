@@ -5,6 +5,9 @@
 #include "gfx/text.h"
 #include "gfx/tex.h"
 
+//Switch threads
+Thread gfxThread[2];
+
 //gfx command buffer/queue
 gfxCmd **gfxCmdBuf;
 
@@ -12,34 +15,28 @@ gfxCmd **gfxCmdBuf;
 static int cmdCur = 0, cmdAdd = 0, cmdMax = 0;
 
 //Framebuffer lock
-static bool fbLock = false;
-
-inline static void waitForBufferLock()
-{
-    while(fbLock){ svcSleepThread(1); }
-}
-
-inline static void lockFB()
-{
-    fbLock = true;
-}
-
-inline static void unlockFB()
-{
-    fbLock = false;
-}
+static bool fbLock = false, cmdLock = false;
 
 tex *frameBuffer;
 
 void gfxProcFunc(void *args)
 {
-    gfxCmd *proc = NULL;
-    int threadID = (int)(args);
-    while(cmdCur < cmdMax - 1 && (proc = gfxCmdBuf[cmdCur++]) != NULL)
+    int threadID = (int)args;
+    while(cmdCur < cmdMax - 1)
     {
-        waitForBufferLock();
+        //SAFETY
+        while(cmdLock){ svcSleepThread(10); }
+        cmdLock = true;
+        int cmdInd = cmdCur++;
+        cmdLock = false;
+
+        gfxCmd *proc = NULL;
+        if((proc = gfxCmdBuf[cmdInd]) == NULL)
+            break;
+
+        while(fbLock){ svcSleepThread(10); }
         if(proc->lock)
-            lockFB();
+            fbLock = true;
 
         switch(proc->cmd)
         {
@@ -75,9 +72,15 @@ void gfxProcFunc(void *args)
             case DRAW_RECT:
                 drawRect_t(proc->argStruct);
                 break;
+
+            case DRAW_RECT_ALPHA:
+                drawRectAlpha_t(proc->argStruct);
+                break;
         }
         if(proc->lock)
-            unlockFB();
+            fbLock = false;
+
+        gfxCmdDestroy(proc);
     }
 }
 
@@ -145,7 +148,6 @@ void gfxProcQueue()
 {
     cmdCur = 0;
 
-    Thread gfxThread[2];
     threadCreate(&gfxThread[0], gfxProcFunc, (void *)0, 0x5000, 0x2C, 1);
     threadStart(&gfxThread[0]);
     threadCreate(&gfxThread[1], gfxProcFunc, (void *)1, 0x5000, 0x2C, 2);
@@ -160,12 +162,7 @@ void gfxProcQueue()
     cmdAdd = 0;
     cmdCur = 0;
     for(int i = 0; i < cmdMax; i++)
-    {
-        if(gfxCmdBuf[i] != NULL)
-            gfxCmdDestroy(gfxCmdBuf[i]);
-
         gfxCmdBuf[i] = NULL;
-    }
 }
 
 typedef struct
@@ -189,6 +186,20 @@ void drawRect(tex *target, int x, int y, int w, int h, clr c, bool locked)
     gfxCmdAddToQueue(add);
 }
 
+void drawRectAlpha(tex *target, int x, int y, int w, int h, clr c, bool locked)
+{
+    rectArgs *args = malloc(sizeof(rectArgs));
+    args->target = target;
+    args->x = x;
+    args->y = y;
+    args->w = w;
+    args->h = h;
+    args->c = c;
+
+    gfxCmd *add = gfxCmdCreate(DRAW_RECT_ALPHA, locked, args);
+    gfxCmdAddToQueue(add);
+}
+
 void drawRect_t(void *argStruct)
 {
     rectArgs *args = (rectArgs *)argStruct;
@@ -208,6 +219,30 @@ void drawRect_t(void *argStruct)
                 continue;
 
             *rowPtr++ = color;
+        }
+    }
+}
+
+void drawRectAlpha_t(void *argStruct)
+{
+    rectArgs *args = (rectArgs *)argStruct;
+    tex *target = args->target;
+    int x = args->x, y = args->y, w = args->w, h = args->h;
+
+    for(int tY = y; tY < y + h; tY++)
+    {
+        if(tY < 0 || tY > target->height)
+            continue;
+
+        uint32_t *rowPtr = &target->data[tY * target->width + x];
+        for(int tX = x; tX < x + w; tX++, rowPtr++)
+        {
+            if(tX < 0 || tX > target->width)
+                continue;
+
+            clr fb = clrCreateU32(*rowPtr);
+
+            *rowPtr = blend(args->c, fb);
         }
     }
 }

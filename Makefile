@@ -30,15 +30,15 @@ include $(DEVKITPRO)/libnx/switch_rules
 #     - icon.jpg
 #     - <libnx folder>/default_icon.jpg
 #---------------------------------------------------------------------------------
-TARGET		:=	JKSV
+TARGET		:=	JKSV_MT
 BUILD		:=	build
 SOURCES		:=	src src/ui src/gfx
 DATA		:=	data
 INCLUDES	:=	inc inc/gfx
 EXEFS_SRC	:=	exefs_src
-APP_TITLE   :=  JKSV
+APP_TITLE   :=  JKSV MT GFX
 APP_AUTHOR  :=  JK_
-APP_VERSION :=  07/29/2018
+APP_VERSION :=  08/03/2018
 ROMFS	    :=	romfs
 
 #---------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ ROMFS	    :=	romfs
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIE
 
-override CFLAGS	+=	-g -Wall -O2 -ffunction-sections \
+override CFLAGS	+=	-g -Wall -O2 -ffunction-sections -finline-functions \
 			$(ARCH) $(DEFINES)
 
 override CFLAGS	+=	$(INCLUDE) -D__SWITCH__ `freetype-config --cflags`

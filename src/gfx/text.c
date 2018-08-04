@@ -108,12 +108,13 @@ static void drawGlyph(const FT_Bitmap *bmp, tex *target, int _x, int _y, const c
         return;
 
     uint8_t *bmpPtr = bmp->buffer;
+    uint32_t *rowPtr =  NULL;
     for(int y = _y; y < _y + bmp->rows; y++)
     {
         if(y > target->height || y < 0)
             continue;
 
-        uint32_t *rowPtr = &target->data[y * target->width + _x];
+        rowPtr = &target->data[y * target->width + _x];
         for(int x = _x; x < _x + bmp->width; x++, bmpPtr++, rowPtr++)
         {
             if(x > target->width || x < 0)
@@ -155,7 +156,8 @@ void drawText_t(void *argStruct)
 
     FT_Set_Char_Size(f->face[faceID], 0, sz * 64, 90, 90);
 
-    for(unsigned i = 0; i < strlen(str); )
+    size_t length = strlen(str);
+    for(unsigned i = 0; i < length; )
     {
         unitCnt = decode_utf8(&tmpChr, (uint8_t *)&str[i]);
         if(unitCnt <= 0)
@@ -190,7 +192,8 @@ size_t textGetWidth(const char *str, const font *f, int sz)
 
     FT_Set_Char_Size(f->face[0], 0, 64 * sz, 90, 90);
 
-    for(unsigned i = 0; i < strlen(str); )
+    size_t length = strlen(str);
+    for(unsigned i = 0; i < length; )
     {
         untCnt = decode_utf8(&tmpChr, (uint8_t *)&str[i]);
 

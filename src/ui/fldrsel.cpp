@@ -12,7 +12,7 @@ namespace ui
 {
     void folderMenuPrepare(data::user& usr, data::titledata& dat)
     {
-        folderMenu.setParams(308, 88, 956);
+        folderMenu.setParams(472, 88, 790);
         folderMenu.reset();
 
         util::makeTitleDir(usr, dat);
@@ -31,8 +31,8 @@ namespace ui
         //Draw folder menu
         folderMenu.draw(mnuTxt);
 
-        data::curData.icon.draw(16, 88);
-        drawText(folderMenuInfo.c_str(), frameBuffer, ui::shared, 16, 360, 18, ui::mnuTxt, false);
+        data::curData.icon.draw(112, 88);
+        drawText(folderMenuInfo.c_str(), frameBuffer, ui::shared, 96, 360, 18, ui::mnuTxt, false);
 
         if(down & KEY_A || folderMenu.getTouchEvent() == MENU_DOUBLE_REL)
         {

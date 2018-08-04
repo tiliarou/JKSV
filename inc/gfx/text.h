@@ -39,7 +39,7 @@ font *fontLoadTTF(const char *path);
 //Frees memory used by font
 void fontDestroy(font *f);
 
-//draws text using font f
+//draws text using font f. Lock prevents drawing until this is finished.
 void drawText(const char *str, tex *target, font *f, int x, int y, int sz, clr c, bool lock);
 void drawText_t(void *argStruct);
 

@@ -87,11 +87,15 @@ namespace ui
     void button::draw()
     {
         if(pressed)
-            drawRect(frameBuffer, x, y, w, h, clrCreateU32(0xFF0D0D0D), true);
+        {
+            ui::drawTextboxInvert(x, y, w, h, true);
+            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, ui::mnuTxt, true);
+        }
         else
-            ui::drawTextbox(x, y, w, h, false);
-
-        drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr, false);
+        {
+            ui::drawTextbox(x, y, w, h, true);
+            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr, true);
+        }
     }
 
     void touchTrack::update(const touchPosition& p)
@@ -154,7 +158,7 @@ namespace ui
             if(down & KEY_A || down & KEY_B || ok.getEvent() == BUTTON_RELEASED)
                 break;
 
-            ui::drawTextbox(256, 128, 768, 464, false);
+            ui::drawTextbox(256, 128, 768, 464, true);
             drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr, false);
             ok.draw();
             texDrawInvert(ui::buttonA, frameBuffer, ok.getTx() + 56, ok.getTy() - 4, false);
@@ -224,7 +228,7 @@ namespace ui
                 break;
             }
 
-            ui::drawTextbox(256, 128, 768, 464, false);
+            ui::drawTextbox(256, 128, 768, 464, true);
             drawText(wrapMess.c_str(), frameBuffer, ui::shared, 272, 144, 24, txtClr, false);
             yes.draw();
             texDrawInvert(ui::buttonA, frameBuffer, yes.getTx() + 64, yes.getTy() - 4, false);
@@ -252,7 +256,7 @@ namespace ui
         return confirm(confMess);
     }
 
-    void drawTextbox(unsigned x, unsigned y, unsigned w, unsigned h, bool lock)
+    void drawTextbox(int x, int y, int w, int h, bool lock)
     {
         //Top
         texDraw(ui::cornerTopLeft, frameBuffer, x, y, lock);
@@ -266,6 +270,26 @@ namespace ui
         texDraw(ui::cornerBottomLeft, frameBuffer, x, (y + h) - 32, lock);
         drawRect(frameBuffer, x + 32, (y + h) - 32, w - 64, 32, tboxClr, lock);
         texDraw(ui::cornerBottomRight, frameBuffer, (x + w) - 32, (y + h) - 32, lock);
+
+    }
+
+    void drawTextboxInvert(int x, int y, int w, int h, bool lock)
+    {
+        clr invRect = ui::tboxClr;
+        clrInvert(&invRect);
+
+        //Top
+        texDrawInvert(ui::cornerTopLeft, frameBuffer, x, y, lock);
+        drawRect(frameBuffer, x + 32, y, w - 64, 32, invRect, lock);
+        texDrawInvert(ui::cornerTopRight, frameBuffer, (x + w) - 32, y, lock);
+
+        //middle
+        drawRect(frameBuffer, x, y + 32,  w, h - 64, invRect, lock);
+
+        //bottom
+        texDrawInvert(ui::cornerBottomLeft, frameBuffer, x, (y + h) - 32, lock);
+        drawRect(frameBuffer, x + 32, (y + h) - 32, w - 64, 32, invRect, lock);
+        texDrawInvert(ui::cornerBottomRight, frameBuffer, (x + w) - 32, (y + h) - 32, lock);
 
     }
 }
