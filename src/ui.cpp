@@ -11,7 +11,7 @@
 #include "util.h"
 #include "file.h"
 
-#define TITLE_TEXT "JKSV - 08/03/2018 - MultiThread GFX Test"
+#define TITLE_TEXT "JKSV - 08/04/2018 - MultiThread GFX Test"
 
 //Secret background that can be drawn from "/JKSV/back.jpg"
 static tex *background = NULL;

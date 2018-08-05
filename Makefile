@@ -38,7 +38,7 @@ INCLUDES	:=	inc inc/gfx
 EXEFS_SRC	:=	exefs_src
 APP_TITLE   :=  JKSV MT GFX
 APP_AUTHOR  :=  JK_
-APP_VERSION :=  08/03/2018
+APP_VERSION :=  08/04/2018
 ROMFS	    :=	romfs
 
 #---------------------------------------------------------------------------------

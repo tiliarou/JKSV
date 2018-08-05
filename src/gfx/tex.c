@@ -7,14 +7,6 @@
 #include "gfx.h"
 #include "clr.h"
 
-//Arg struct for threaded gfx
-typedef struct
-{
-    const tex *t;
-    tex *target;
-    int x, y;
-} texArgs;
-
 texArgs *texArgsCreate(const tex *t, tex *target, int x, int y)
 {
     texArgs *ret = malloc(sizeof(texArgs));

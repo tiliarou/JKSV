@@ -88,13 +88,13 @@ namespace ui
     {
         if(pressed)
         {
-            ui::drawTextboxInvert(x, y, w, h, true);
-            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, ui::mnuTxt, true);
+            ui::drawTextboxInvert(x, y, w, h, false);
+            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, ui::mnuTxt, false);
         }
         else
         {
-            ui::drawTextbox(x, y, w, h, true);
-            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr, true);
+            ui::drawTextbox(x, y, w, h, false);
+            drawText(text.c_str(), frameBuffer, ui::shared, tx, ty, 24, txtClr, false);
         }
     }
 

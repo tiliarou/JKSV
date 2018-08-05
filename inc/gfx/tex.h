@@ -10,6 +10,16 @@ typedef struct
     uint32_t *data;
 } tex;
 
+//Arg struct for threaded gfx
+typedef struct
+{
+    const tex *t;
+    tex *target;
+    int x, y;
+} texArgs;
+
+texArgs *texArgsCreate(const tex *t, tex *target, int x, int y);
+
 //Inits empty tex
 tex *texCreate(int w, int h);
 

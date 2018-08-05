@@ -15,72 +15,87 @@ gfxCmd **gfxCmdBuf;
 static int cmdCur = 0, cmdAdd = 0, cmdMax = 0;
 
 //Framebuffer lock
-static bool fbLock = false, cmdLock = false;
+static bool runThreads = true, cmdProc = false, fbLock = false, cmdLock = false;
 
 tex *frameBuffer;
 
 void gfxProcFunc(void *args)
 {
     int threadID = (int)args;
-    while(cmdCur < cmdMax - 1)
+    while(runThreads)
     {
-        //SAFETY
-        while(cmdLock){ svcSleepThread(10); }
-        cmdLock = true;
-        int cmdInd = cmdCur++;
-        cmdLock = false;
-
-        gfxCmd *proc = NULL;
-        if((proc = gfxCmdBuf[cmdInd]) == NULL)
-            break;
-
-        while(fbLock){ svcSleepThread(10); }
-        if(proc->lock)
-            fbLock = true;
-
-        switch(proc->cmd)
+        if(cmdProc)
         {
-            case DRAW_TEXT:
+            while(cmdCur < cmdMax - 1)
+            {
+                //SAFETY
+                while(cmdLock)
                 {
-                    //Send the faceID to use according to thread
-                    textArgs *tmp = (textArgs *)proc->argStruct;
-                    tmp->faceID = threadID;
-                    drawText_t(proc->argStruct);
+                    svcSleepThread(10);
                 }
-                break;
+                cmdLock = true;
+                int cmdInd = cmdCur++;
+                cmdLock = false;
 
-            case DRAW_IMG:
-                texDraw_t(proc->argStruct);
-                break;
+                gfxCmd *proc = NULL;
+                if((proc = gfxCmdBuf[cmdInd]) == NULL)
+                    break;
 
-            case DRAW_IMG_NO_ALPHA:
-                texDrawNoAlpha_t(proc->argStruct);
-                break;
+                while(fbLock)
+                {
+                    svcSleepThread(10);
+                }
+                if(proc->lock)
+                    fbLock = true;
 
-            case DRAW_IMG_SKIP:
-                texDrawSkip_t(proc->argStruct);
-                break;
+                switch(proc->cmd)
+                {
+                    case DRAW_TEXT:
+                        {
+                            //Send the faceID to use according to thread
+                            textArgs *tmp = (textArgs *)proc->argStruct;
+                            tmp->faceID = threadID;
+                            drawText_t(proc->argStruct);
+                        }
+                        break;
 
-            case DRAW_IMG_SKIP_NO_ALPHA:
-                texDrawSkipNoAlpha_t(proc->argStruct);
-                break;
+                    case DRAW_IMG:
+                        texDraw_t(proc->argStruct);
+                        break;
 
-            case DRAW_IMG_INVERT:
-                texDrawInvert_t(proc->argStruct);
-                break;
+                    case DRAW_IMG_NO_ALPHA:
+                        texDrawNoAlpha_t(proc->argStruct);
+                        break;
 
-            case DRAW_RECT:
-                drawRect_t(proc->argStruct);
-                break;
+                    case DRAW_IMG_SKIP:
+                        texDrawSkip_t(proc->argStruct);
+                        break;
 
-            case DRAW_RECT_ALPHA:
-                drawRectAlpha_t(proc->argStruct);
-                break;
+                    case DRAW_IMG_SKIP_NO_ALPHA:
+                        texDrawSkipNoAlpha_t(proc->argStruct);
+                        break;
+
+                    case DRAW_IMG_INVERT:
+                        texDrawInvert_t(proc->argStruct);
+                        break;
+
+                    case DRAW_RECT:
+                        drawRect_t(proc->argStruct);
+                        break;
+
+                    case DRAW_RECT_ALPHA:
+                        drawRectAlpha_t(proc->argStruct);
+                        break;
+                }
+                if(proc->lock)
+                    fbLock = false;
+
+                gfxCmdDestroy(proc);
+            }
+            cmdProc = false;
         }
-        if(proc->lock)
-            fbLock = false;
-
-        gfxCmdDestroy(proc);
+        else
+            svcSleepThread(10);
     }
 }
 
@@ -100,6 +115,12 @@ void graphicsInit(int windowWidth, int windowHeight, int maxCmd)
     frameBuffer->data = (uint32_t *)gfxGetFramebuffer(NULL, NULL);
     frameBuffer->size = windowWidth * windowHeight;
 
+    //Start threads
+    threadCreate(&gfxThread[0], gfxProcFunc, (void *)0, 0x50000, 0x2C, 1);
+    threadStart(&gfxThread[0]);
+    threadCreate(&gfxThread[1], gfxProcFunc, (void *)1, 0x50000, 0x2C, 2);
+    threadStart(&gfxThread[1]);
+
     gfxCmdBuf = malloc(sizeof(gfxCmd *) * maxCmd);
     for(int i = 0; i < maxCmd; i++)
         gfxCmdBuf[i] = NULL;
@@ -109,6 +130,14 @@ void graphicsInit(int windowWidth, int windowHeight, int maxCmd)
 
 void graphicsExit()
 {
+    runThreads = false;
+
+    //Close threads
+    threadWaitForExit(&gfxThread[0]);
+    threadClose(&gfxThread[0]);
+    threadWaitForExit(&gfxThread[1]);
+    threadClose(&gfxThread[1]);
+
     free(frameBuffer);
     plExit();
     gfxExit();
@@ -146,17 +175,11 @@ void gfxCmdAddToQueue(gfxCmd * g)
 
 void gfxProcQueue()
 {
+    //Just to be 100% sure
     cmdCur = 0;
 
-    threadCreate(&gfxThread[0], gfxProcFunc, (void *)0, 0x5000, 0x2C, 1);
-    threadStart(&gfxThread[0]);
-    threadCreate(&gfxThread[1], gfxProcFunc, (void *)1, 0x5000, 0x2C, 2);
-    threadStart(&gfxThread[1]);
-
-    threadWaitForExit(&gfxThread[0]);
-    threadClose(&gfxThread[0]);
-    threadWaitForExit(&gfxThread[1]);
-    threadClose(&gfxThread[1]);
+    cmdProc = true;
+    while(cmdProc){ svcSleepThread(10); }
 
     //reset
     cmdAdd = 0;
